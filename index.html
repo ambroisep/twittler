@@ -11,15 +11,24 @@
         var $body = $('body');
         $body.html('');
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message + ' // ' + tweet.created_at);
-          $tweet.appendTo($body);
-          index -= 1;
+        var displayTweets = function(startInd, endInd){
+          var index = endInd;
+          while(index >= startInd){
+            var tweet = streams.home[index];
+            var $tweet = $('<div></div>');
+            $tweet.text('@' + tweet.user + ': ' + tweet.message + ' // ' + tweet.created_at);
+            $tweet.appendTo($body);
+            index -= 1;
+          }
         }
-
+        var firstNewTweet = 0;
+        var refreshTweets = function(){
+          var length = streams.home.length;
+          displayTweets(firstNewTweet, length - 1);
+          firstNewTweet = length;
+          setTimeout(refreshTweets, 1500);
+        }
+        refreshTweets();
       });
 
     </script>
